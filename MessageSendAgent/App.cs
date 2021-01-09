@@ -45,7 +45,7 @@ namespace MessageSendAgent
                 return _session;
             }
 
-            var connectionString = @"Server=.\SQLEXPRESS;Database=KafkaDemo;User Id=demo;Password=123456;";
+            var connectionString = @"Server=.\SQLEXPRESS; Database=KafkaDemo; Trusted_Connection=True;";
 
             FluentConfiguration _config = Fluently.Configure()
                 .Database(MsSqlConfiguration.MsSql2012.ConnectionString(connectionString))

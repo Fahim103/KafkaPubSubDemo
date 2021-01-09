@@ -16,7 +16,7 @@ namespace ConsoleConsumerFirstDemo
             var config = new ConsumerConfig
             {
                 BootstrapServers = "localhost:9092",
-                GroupId = "console-demo",
+                GroupId = "console-demo1",
                 AutoOffsetReset = AutoOffsetReset.Earliest
             };
 
@@ -25,7 +25,7 @@ namespace ConsoleConsumerFirstDemo
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            
+            Console.WriteLine("Subscribing to topic demo");
             _consumer.Subscribe("demo");
 
             while (!cancellationToken.IsCancellationRequested)
