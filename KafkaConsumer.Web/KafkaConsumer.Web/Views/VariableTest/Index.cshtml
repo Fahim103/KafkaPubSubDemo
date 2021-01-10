@@ -20,6 +20,19 @@
 
     </dl>
 </div>
+<hr />
+<hr />
+<div>
+    <h4>List</h4>
+    <hr />
+    <ul>
+
+        @foreach (var message in Model.MessageList)
+        {
+            <li>@message</li>
+        }
+    </ul>
+</div>
 <p>
     @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
     @Html.ActionLink("Back to List", "Index")

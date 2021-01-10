@@ -36,7 +36,8 @@ namespace KafkaConsumer.Web.Background
                 Debug.WriteLine($"Received Message : {message}");
 
                 // Write in the global shared variable
-                Status.Message = message; 
+                Status.Message = message;
+                Status.MessagesList.Add(message);
             }
 
             _consumer.Close();
