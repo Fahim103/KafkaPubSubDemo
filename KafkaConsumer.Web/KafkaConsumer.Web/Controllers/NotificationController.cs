@@ -14,7 +14,6 @@ namespace KafkaConsumer.Web.Controllers
 {
     public class NotificationController : ApiController
     {
-
         [Route("api/Notification/MessageReceived")]
         [HttpPost]
         public IHttpActionResult MessageReceived(SubscriptionDto subscriptionDto)
