@@ -19,10 +19,10 @@ namespace KafkaConsumer.Web.Controllers
         // GET: VariableTest
         public ActionResult Index()
         {
-            Debug.WriteLine($"Starting {nameof(StatusUpdateWorker)} for consuming messages");
+            //Debug.WriteLine($"Starting {nameof(StatusUpdateWorker)} for consuming messages");
 
-            HostingEnvironment.QueueBackgroundWorkItem(
-                cancellationToken => new StatusUpdateWorker().StartProcessing(cancellationToken));
+            //HostingEnvironment.QueueBackgroundWorkItem(
+            //    cancellationToken => new StatusUpdateWorker().StartProcessing(cancellationToken));
 
             var model = new VariableModel
             {
