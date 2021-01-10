@@ -1,5 +1,6 @@
 ﻿using Confluent.Kafka;
 using PublisherDemo.Web.Models;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -11,6 +12,7 @@ namespace PublisherDemo.Web.Controllers
         [HttpGet]
         public ActionResult PublishMessage()
         {
+            ViewBag.ProcessId = Process.GetCurrentProcess().Id;
             return View();
         }
 

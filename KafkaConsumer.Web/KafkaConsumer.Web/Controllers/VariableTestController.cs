@@ -1,5 +1,6 @@
 ﻿using KafkaConsumer.Web.GlobalVariables;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Web.Mvc;
 
 namespace KafkaConsumer.Web.Controllers
@@ -8,6 +9,7 @@ namespace KafkaConsumer.Web.Controllers
     {
         public string Message { get; set; }
         public List<string> MessageList { get; set; }
+        public int ProcessId { get; set; }
 
         public VariableModel()
         {
@@ -26,9 +28,9 @@ namespace KafkaConsumer.Web.Controllers
 
             var model = new VariableModel
             {
-                Message = Status.Message
+                Message = Status.Message,
+                ProcessId = Process.GetCurrentProcess().Id
             };
-
 
             return View(model);
         }
