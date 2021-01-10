@@ -1,11 +1,7 @@
 ﻿using Confluent.Kafka;
 using KafkaConsumer.Web.GlobalVariables;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading;
-using System.Web;
 
 namespace KafkaConsumer.Web.Background
 {

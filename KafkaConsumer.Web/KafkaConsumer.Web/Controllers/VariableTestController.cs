@@ -1,11 +1,4 @@
-﻿using KafkaConsumer.Web.Background;
-using KafkaConsumer.Web.GlobalVariables;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Web;
-using System.Web.Hosting;
+﻿using KafkaConsumer.Web.GlobalVariables;
 using System.Web.Mvc;
 
 namespace KafkaConsumer.Web.Controllers
