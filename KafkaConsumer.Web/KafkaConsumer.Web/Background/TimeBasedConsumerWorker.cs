@@ -19,9 +19,7 @@ namespace KafkaConsumer.Web.Background
             {
                 BootstrapServers = "localhost:9092",
                 GroupId = "timestamp-test",
-                EnableAutoOffsetStore = false,
-                //AutoCommitIntervalMs = 1000,
-                //EnableAutoCommit = false
+                EnableAutoOffsetStore = false
             };
 
             _consumer = new ConsumerBuilder<Ignore, string>(config).Build();
@@ -29,44 +27,24 @@ namespace KafkaConsumer.Web.Background
 
         public void StartProcessing(CancellationToken cancellationToken = default(CancellationToken))
         {
-            //var date = new DateTime();
-            var date = new DateTime(2021, 1, 12, 16, 13, 0);
-            var timeStampCollection = new List<TopicPartitionTimestamp>();
-            timeStampCollection.Add(new TopicPartitionTimestamp("demo", new Partition(0), new Timestamp(date)));
-            timeStampCollection.Add(new TopicPartitionTimestamp("demo", new Partition(1), new Timestamp(date)));
-            timeStampCollection.Add(new TopicPartitionTimestamp("demo", new Partition(2), new Timestamp(date)));
-
-
             Debug.WriteLine($"Subscriping to topic -> demo");
             _consumer.Subscribe("demo");
-            var topicPartitionOffset = _consumer.OffsetsForTimes(timeStampCollection, TimeSpan.FromSeconds(10));
-            //var topicPartitionOffsetToCommit = new List<TopicPartitionOffset>();
+            var test = _consumer.Assignment;
 
-            //foreach (var tp in topicPartitionOffset)
-            //{
-            //    if (tp.Offset.Value != -1)
-            //    {
-            //        _consumer.StoreOffset(tp);
-            //        topicPartitionOffsetToCommit.Add(tp);
-            //    }
-            //    else
-            //    {
-            //        var result = _consumer.QueryWatermarkOffsets(tp.TopicPartition, TimeSpan.FromSeconds(60));
-            //        var tpOffset = new TopicPartitionOffset(tp.TopicPartition, result.High);
-            //        _consumer.StoreOffset(tpOffset);
-            //        topicPartitionOffsetToCommit.Add(tpOffset);
-            //    }
-            //}
-            //_consumer.Commit(topicPartitionOffsetToCommit);
-            //Thread.Sleep(10000); // To let kafka commit the offset
-            //var commitOffset = _consumer.Committed(TimeSpan.FromSeconds(10));
-            //while (_consumer.Position(topicPartitionOffset[0].TopicPartition) != commitOffset[0].Offset) ;
-            //while (_consumer.Position(topicPartitionOffset[1].TopicPartition) != commitOffset[1].Offset) ;
-            //while (_consumer.Position(topicPartitionOffset[2].TopicPartition) != commitOffset[2].Offset) ;
+            var date = DateTime.UtcNow.ToLocalTime();
+            var timeStampCollection = new List<TopicPartitionTimestamp>();
+
+            foreach (var partition in _consumer.Assignment)
+            {
+                timeStampCollection.Add(new TopicPartitionTimestamp("demo", partition.Partition, new Timestamp(date)));
+            }
+
+            var topicPartitionOffset = _consumer.OffsetsForTimes(timeStampCollection, TimeSpan.FromSeconds(10));
             
-            _consumer.Seek(topicPartitionOffset[0]);
-            _consumer.Seek(topicPartitionOffset[1]);
-            _consumer.Seek(topicPartitionOffset[2]);
+            foreach(var tpo in topicPartitionOffset)
+            {
+                _consumer.Seek(tpo);
+            }
 
             while (!cancellationToken.IsCancellationRequested)
             {

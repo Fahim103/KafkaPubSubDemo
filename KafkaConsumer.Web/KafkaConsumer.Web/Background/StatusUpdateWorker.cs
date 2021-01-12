@@ -8,12 +8,9 @@ namespace KafkaConsumer.Web.Background
     public class StatusUpdateWorker
     {
         private readonly IConsumer<Ignore, string> _consumer;
-        private static int count = 0;
 
         public StatusUpdateWorker()
         {
-            count++;
-            Debug.WriteLine($"Count is : {count}");
             var config = new ConsumerConfig
             {
                 BootstrapServers = "localhost:9092",
