@@ -12,11 +12,14 @@ namespace KafkaConsumer.Web
     public class WebApiApplication : System.Web.HttpApplication
     {
         private readonly StatusUpdateWorker _statusUpdateWorker;
+        private readonly TimeBasedConsumerWorker _timeStampUpdateWorker;
         private CancellationTokenSource StatusUpdateWorkerCancellationTokenSource;
+        private CancellationTokenSource TimeBasedConsumerWorkerCancellationTokenSource;
 
         public WebApiApplication()
         {
             _statusUpdateWorker = new StatusUpdateWorker();
+            _timeStampUpdateWorker = new TimeBasedConsumerWorker();
         }
 
         protected void Application_Start()
@@ -32,13 +35,22 @@ namespace KafkaConsumer.Web
             //HostingEnvironment.QueueBackgroundWorkItem(
             //    cancellationToken => new StatusUpdateWorker().StartProcessing(cancellationToken));
 
+            //HostingEnvironment.QueueBackgroundWorkItem(ct =>
+            //{
+            //    StatusUpdateWorkerCancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(ct);
+            //    var cancellationToken = StatusUpdateWorkerCancellationTokenSource.Token;
+
+            //    Debug.WriteLine($"Token is {cancellationToken}");
+            //    _statusUpdateWorker.StartProcessing(cancellationToken);
+            //});
+
             HostingEnvironment.QueueBackgroundWorkItem(ct =>
             {
-                StatusUpdateWorkerCancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(ct);
-                var cancellationToken = StatusUpdateWorkerCancellationTokenSource.Token;
+                TimeBasedConsumerWorkerCancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(ct);
+                var cancellationToken = TimeBasedConsumerWorkerCancellationTokenSource.Token;
 
                 Debug.WriteLine($"Token is {cancellationToken}");
-                _statusUpdateWorker.StartProcessing(cancellationToken);
+                _timeStampUpdateWorker.StartProcessing(cancellationToken);
             });
         }
 
@@ -46,7 +58,8 @@ namespace KafkaConsumer.Web
         protected void Application_End()
         {
             // Cancel the kafka consumer
-            StatusUpdateWorkerCancellationTokenSource.Cancel();
+            //StatusUpdateWorkerCancellationTokenSource.Cancel();
+            TimeBasedConsumerWorkerCancellationTokenSource.Cancel();
         }
     }
 }

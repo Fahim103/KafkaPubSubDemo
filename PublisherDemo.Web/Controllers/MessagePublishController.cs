@@ -39,14 +39,15 @@ namespace PublisherDemo.Web.Controllers
             
             var config = new ProducerConfig()
             {
-                BootstrapServers = "localhost:9092, localhost:9093, localhost:9094, localhost:9095"
+                BootstrapServers = "localhost:9092",
+                
             };
 
             var producer = new ProducerBuilder<string, string>(config).Build();
             var random = new Random();
             List<Task> tasks = new List<Task>();
 
-            for (int i = 0; i < 1000; i++)
+            for (int i = 0; i < 100; i++)
             {
                 var index = random.Next(0, 4);
 
@@ -55,6 +56,11 @@ namespace PublisherDemo.Web.Controllers
                     Key = keys[index],
                     Value = publishMessageModel.Message + " -> " + i
                 }, CancellationToken.None);
+
+                Debug.WriteLine(deliveryReport.Value);
+
+
+                Thread.Sleep(5000);
 
                 //tasks.Add(
                 //    producer.ProduceAsync(publishMessageModel.TopicName, new Message<string, string>()

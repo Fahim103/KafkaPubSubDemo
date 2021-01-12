@@ -17,7 +17,7 @@ namespace KafkaConsumer.Web.Background
             var config = new ConsumerConfig
             {
                 BootstrapServers = "localhost:9092",
-                GroupId = Status.ConsumerGroupID,
+                GroupId = "console-demo1",
                 AutoOffsetReset = AutoOffsetReset.Latest
             };
 
