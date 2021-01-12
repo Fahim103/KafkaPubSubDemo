@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace KafkaConsumer.Web.GlobalVariables
 {
@@ -6,5 +7,6 @@ namespace KafkaConsumer.Web.GlobalVariables
     {
         public static string Message = "Initial Dummy Message...";
         public static List<string> MessagesList = new List<string>();
+        public static string ConsumerGroupID = Guid.NewGuid().ToString();
     }
 }

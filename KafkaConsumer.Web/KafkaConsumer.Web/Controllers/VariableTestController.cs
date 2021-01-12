@@ -10,6 +10,7 @@ namespace KafkaConsumer.Web.Controllers
         public string Message { get; set; }
         public List<string> MessageList { get; set; }
         public int ProcessId { get; set; }
+        public string ConsumerGroupId { get; set; }
 
         public VariableModel()
         {
@@ -29,7 +30,8 @@ namespace KafkaConsumer.Web.Controllers
             var model = new VariableModel
             {
                 Message = Status.Message,
-                ProcessId = Process.GetCurrentProcess().Id
+                ProcessId = Process.GetCurrentProcess().Id,
+                ConsumerGroupId = Status.ConsumerGroupID
             };
 
             return View(model);
