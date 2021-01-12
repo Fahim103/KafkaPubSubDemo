@@ -1,5 +1,7 @@
 ﻿using Confluent.Kafka;
 using PublisherDemo.Web.Models;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
@@ -9,6 +11,14 @@ namespace PublisherDemo.Web.Controllers
 {
     public class MessagePublishController : Controller
     {
+        private readonly static List<string> keys = new List<string>()
+        {
+            "First",
+            "Second",
+            "Third",
+            "Fourth"
+        };
+
         [HttpGet]
         public ActionResult PublishMessage()
         {
@@ -29,16 +39,34 @@ namespace PublisherDemo.Web.Controllers
             
             var config = new ProducerConfig()
             {
-                BootstrapServers = "localhost:9092"
+                BootstrapServers = "localhost:9092, localhost:9093, localhost:9094, localhost:9095"
             };
 
-            var producer = new ProducerBuilder<Null, string>(config).Build();
+            var producer = new ProducerBuilder<string, string>(config).Build();
+            var random = new Random();
+            List<Task> tasks = new List<Task>();
 
-            await producer.ProduceAsync(publishMessageModel.TopicName, new Message<Null, string>()
+            for (int i = 0; i < 1000; i++)
             {
-                Value = publishMessageModel.Message
-            }, CancellationToken.None);
+                var index = random.Next(0, 4);
 
+                var deliveryReport = await producer.ProduceAsync(publishMessageModel.TopicName, new Message<string, string>()
+                {
+                    Key = keys[index],
+                    Value = publishMessageModel.Message + " -> " + i
+                }, CancellationToken.None);
+
+                //tasks.Add(
+                //    producer.ProduceAsync(publishMessageModel.TopicName, new Message<string, string>()
+                //    {
+                //        Key = keys[index],
+                //        Value = publishMessageModel.Message + " -> " + i
+                //    }, CancellationToken.None)
+                //);
+            }
+
+            //Task.WaitAll(tasks.ToArray());
+            
             return RedirectToAction("PublishMessage");
         }
     }
