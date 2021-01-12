@@ -36,5 +36,22 @@ namespace KafkaConsumer.Web.Controllers
 
             return View(model);
         }
+
+        public ActionResult Index2()
+        {
+            //Debug.WriteLine($"Starting {nameof(StatusUpdateWorker)} for consuming messages");
+
+            //HostingEnvironment.QueueBackgroundWorkItem(
+            //    cancellationToken => new StatusUpdateWorker().StartProcessing(cancellationToken));
+
+            var model = new VariableModel
+            {
+                Message = Status.TimeBasedMessage,
+                ProcessId = Process.GetCurrentProcess().Id,
+                ConsumerGroupId = Status.TimeBasedConsumerGroupID
+            };
+
+            return View(model);
+        }
     }
 }

@@ -18,7 +18,7 @@ namespace KafkaConsumer.Web.Background
             var config = new ConsumerConfig
             {
                 BootstrapServers = "localhost:9092",
-                GroupId = "timestamp-test",
+                GroupId = Status.TimeBasedConsumerGroupID,
                 EnableAutoOffsetStore = false
             };
 
@@ -27,9 +27,8 @@ namespace KafkaConsumer.Web.Background
 
         public void StartProcessing(CancellationToken cancellationToken = default(CancellationToken))
         {
-            Debug.WriteLine($"Subscriping to topic -> demo");
+            Debug.WriteLine($"Timebased Consumer Subscriping to topic -> demo");
             _consumer.Subscribe("demo");
-            var test = _consumer.Assignment;
 
             var date = DateTime.UtcNow.ToLocalTime();
             var timeStampCollection = new List<TopicPartitionTimestamp>();
@@ -50,11 +49,11 @@ namespace KafkaConsumer.Web.Background
             {
                 var consumeResult = _consumer.Consume(cancellationToken);
                 var message = consumeResult.Message.Value;
-                Debug.WriteLine($"Received Message : {message}");
+                Debug.WriteLine($"Timebased Consumer Received Message : {message}");
 
                 // Write in the global shared variable
-                Status.Message = message;
-                Status.MessagesList.Add(message);
+                Status.TimeBasedMessage = message;
+                Status.TimeBasedMessageList.Add(message);
 
                 _consumer.Commit(consumeResult);
             }

@@ -1,0 +1,41 @@
+﻿@model KafkaConsumer.Web.Controllers.VariableModel
+
+@{
+    ViewBag.Title = "Index2";
+}
+
+<h2>Index</h2>
+<h3>Process ID: @Model.ProcessId</h3>
+<h4>Consumer Group: @Model.ConsumerGroupId</h4>
+
+<div>
+    <h4>VariableModel</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Message)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Message)
+        </dd>
+
+    </dl>
+</div>
+<hr />
+<hr />
+<div>
+    <h4>List</h4>
+    <hr />
+    <ul>
+
+        @foreach (var message in Model.MessageList)
+        {
+            <li>@message</li>
+        }
+    </ul>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

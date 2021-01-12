@@ -60,7 +60,7 @@ namespace PublisherDemo.Web.Controllers
                 Debug.WriteLine(deliveryReport.Value);
 
 
-                Thread.Sleep(5000);
+                Thread.Sleep(1000);
 
                 //tasks.Add(
                 //    producer.ProduceAsync(publishMessageModel.TopicName, new Message<string, string>()

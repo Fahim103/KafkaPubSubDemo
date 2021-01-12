@@ -35,14 +35,14 @@ namespace KafkaConsumer.Web
             //HostingEnvironment.QueueBackgroundWorkItem(
             //    cancellationToken => new StatusUpdateWorker().StartProcessing(cancellationToken));
 
-            //HostingEnvironment.QueueBackgroundWorkItem(ct =>
-            //{
-            //    StatusUpdateWorkerCancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(ct);
-            //    var cancellationToken = StatusUpdateWorkerCancellationTokenSource.Token;
+            HostingEnvironment.QueueBackgroundWorkItem(ct =>
+            {
+                StatusUpdateWorkerCancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(ct);
+                var cancellationToken = StatusUpdateWorkerCancellationTokenSource.Token;
 
-            //    Debug.WriteLine($"Token is {cancellationToken}");
-            //    _statusUpdateWorker.StartProcessing(cancellationToken);
-            //});
+                Debug.WriteLine($"Token is {cancellationToken}");
+                _statusUpdateWorker.StartProcessing(cancellationToken);
+            });
 
             HostingEnvironment.QueueBackgroundWorkItem(ct =>
             {
@@ -58,7 +58,7 @@ namespace KafkaConsumer.Web
         protected void Application_End()
         {
             // Cancel the kafka consumer
-            //StatusUpdateWorkerCancellationTokenSource.Cancel();
+            StatusUpdateWorkerCancellationTokenSource.Cancel();
             TimeBasedConsumerWorkerCancellationTokenSource.Cancel();
         }
     }
