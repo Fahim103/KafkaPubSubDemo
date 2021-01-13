@@ -14,7 +14,7 @@ namespace KafkaConsumer.Web.Controllers
 
         public VariableModel()
         {
-            MessageList = Status.MessagesList;
+            MessageList = SharedVariables.MessagesList;
         }
     }
     public class VariableTestController : Controller
@@ -29,9 +29,9 @@ namespace KafkaConsumer.Web.Controllers
 
             var model = new VariableModel
             {
-                Message = Status.Message,
+                Message = SharedVariables.Message,
                 ProcessId = Process.GetCurrentProcess().Id,
-                ConsumerGroupId = Status.ConsumerGroupID
+                ConsumerGroupId = SharedVariables.ConsumerGroupID
             };
 
             return View(model);
@@ -46,9 +46,9 @@ namespace KafkaConsumer.Web.Controllers
 
             var model = new VariableModel
             {
-                Message = Status.TimeBasedMessage,
+                Message = SharedVariables.TimeBasedMessage,
                 ProcessId = Process.GetCurrentProcess().Id,
-                ConsumerGroupId = Status.TimeBasedConsumerGroupID
+                ConsumerGroupId = SharedVariables.TimeBasedConsumerGroupID
             };
 
             return View(model);

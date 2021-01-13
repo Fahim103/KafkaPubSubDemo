@@ -18,7 +18,7 @@ namespace KafkaConsumer.Web.Background
             var config = new ConsumerConfig
             {
                 BootstrapServers = "localhost:9092",
-                GroupId = Status.TimeBasedConsumerGroupID,
+                GroupId = SharedVariables.TimeBasedConsumerGroupID,
                 EnableAutoOffsetStore = false
             };
 
@@ -27,15 +27,15 @@ namespace KafkaConsumer.Web.Background
 
         public void StartProcessing(CancellationToken cancellationToken = default(CancellationToken))
         {
-            Debug.WriteLine($"Timebased Consumer Subscriping to topic -> demo");
-            _consumer.Subscribe("demo");
+            Debug.WriteLine($"Timebased Consumer Subscriping to topic -> {SharedVariables.DemoTopicName}");
+            _consumer.Subscribe(SharedVariables.DemoTopicName);
 
             var date = DateTime.UtcNow.ToLocalTime();
             var timeStampCollection = new List<TopicPartitionTimestamp>();
 
             foreach (var partition in _consumer.Assignment)
             {
-                timeStampCollection.Add(new TopicPartitionTimestamp("demo", partition.Partition, new Timestamp(date)));
+                timeStampCollection.Add(new TopicPartitionTimestamp(SharedVariables.DemoTopicName, partition.Partition, new Timestamp(date)));
             }
 
             var topicPartitionOffset = _consumer.OffsetsForTimes(timeStampCollection, TimeSpan.FromSeconds(10));
@@ -52,8 +52,8 @@ namespace KafkaConsumer.Web.Background
                 Debug.WriteLine($"Timebased Consumer Received Message : {message}");
 
                 // Write in the global shared variable
-                Status.TimeBasedMessage = message;
-                Status.TimeBasedMessageList.Add(message);
+                SharedVariables.TimeBasedMessage = message;
+                SharedVariables.TimeBasedMessageList.Add(message);
 
                 _consumer.Commit(consumeResult);
             }

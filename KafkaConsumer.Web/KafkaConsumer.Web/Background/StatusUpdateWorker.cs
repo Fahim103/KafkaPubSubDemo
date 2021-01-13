@@ -14,8 +14,8 @@ namespace KafkaConsumer.Web.Background
             var config = new ConsumerConfig
             {
                 BootstrapServers = "localhost:9092",
-                GroupId = Status.ConsumerGroupID,
-                AutoOffsetReset = AutoOffsetReset.Latest
+                GroupId = SharedVariables.ConsumerGroupID,
+                AutoOffsetReset = AutoOffsetReset.Earliest
             };
 
             _consumer = new ConsumerBuilder<Ignore, string>(config).Build();
@@ -23,18 +23,19 @@ namespace KafkaConsumer.Web.Background
 
         public void StartProcessing(CancellationToken cancellationToken = default(CancellationToken))
         {
-            Debug.WriteLine($"Subscriping to topic -> demo");
-            _consumer.Subscribe("demo");
+            Debug.WriteLine($"Subscriping to topic -> {SharedVariables.DemoTopicName}");
+            _consumer.Subscribe(SharedVariables.DemoTopicName);
 
             while (!cancellationToken.IsCancellationRequested)
             {
                 var consumeResult = _consumer.Consume(cancellationToken);
                 var message = consumeResult.Message.Value;
-                Debug.WriteLine($"Received Message : {message}");
+                var workerName = nameof(StatusUpdateWorker);
+                Debug.WriteLine($"{workerName} Received Message : {message}");
 
                 // Write in the global shared variable
-                Status.Message = message;
-                Status.MessagesList.Add(message);
+                SharedVariables.Message = message;
+                SharedVariables.MessagesList.Add(message);
             }
 
             _consumer.Close();

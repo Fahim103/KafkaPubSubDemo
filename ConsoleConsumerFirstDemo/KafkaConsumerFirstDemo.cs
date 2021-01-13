@@ -34,8 +34,8 @@ namespace ConsoleConsumerFirstDemo
         public Task StartAsync(CancellationToken cancellationToken)
         {
             Console.WriteLine($"Process Id: {Process.GetCurrentProcess().Id}");
-            Console.WriteLine("Subscribing to topic demo");
-            _consumer.Subscribe("demo");
+            Console.WriteLine($"Subscribing to topic {Program.TopicName}");
+            _consumer.Subscribe(Program.TopicName);
 
             while (!cancellationToken.IsCancellationRequested)
             {

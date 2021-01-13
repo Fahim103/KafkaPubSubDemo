@@ -65,7 +65,7 @@ namespace MessageSendAgent
         {
             Console.WriteLine("Starting up....");
 
-            _consumer.Subscribe("demo");
+            _consumer.Subscribe(Program.TopicName);
 
             while (!cancellationToken.IsCancellationRequested)
             {
