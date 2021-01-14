@@ -16,6 +16,16 @@ namespace KafkaConsumer.Web.Controllers
         {
             MessageList = SharedVariables.MessagesList;
         }
+
+        public string GetMessage()
+        {
+            return SharedVariables.Message;
+        }
+
+        public List<string> GetData()
+        {
+            return SharedVariables.MessagesList;
+        }
     }
     public class VariableTestController : Controller
     {

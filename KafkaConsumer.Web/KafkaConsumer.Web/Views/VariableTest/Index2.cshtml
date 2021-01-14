@@ -27,15 +27,42 @@
 <div>
     <h4>List</h4>
     <hr />
-    <ul>
+    <ul id="kafkaDataList">
 
-        @foreach (var message in Model.MessageList)
-        {
-            <li>@message</li>
-        }
     </ul>
 </div>
 <p>
     @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
     @Html.ActionLink("Back to List", "Index")
 </p>
+
+@section signalR {
+    <script src="~/Scripts/jquery.signalR-2.4.1.min.js"></script>
+    <script src="/signalr/hubs"></script>
+    <script type="text/javascript">
+
+        $(function () {
+            var hubNotify = $.connection.testMessageHub;
+            let count = 0;
+            $.connection.hub.start().done(function () {
+                console.log("Connecting to hub...")
+                getAll();
+            });
+
+            hubNotify.client.refreshKafkaData = function (message) {
+                console.log("Getting data from kafka " + count);
+                count = count + 1;
+                getAll(message);
+            };
+        });
+
+        function getAll(data) {
+            if (data) {
+                console.log("Get All method");
+                var dataList = $('#kafkaDataList');
+                dataList.append('<li>' + data + '</li>');
+            }
+            //console.log(data);
+        }
+    </script>
+}

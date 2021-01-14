@@ -1,15 +1,24 @@
 ﻿using Autofac;
 using Autofac.Integration.Mvc;
+using Microsoft.Owin;
+using Owin;
 using Serilog;
 using System.Web;
 using System.Web.Hosting;
 using System.Web.Mvc;
 
+[assembly: OwinStartup(typeof(KafkaConsumer.Web.Startup))]
 namespace KafkaConsumer.Web
 {
     public class Startup
     {
         public static ILifetimeScope AutofacContainer { get; private set; }
+
+        public void Configuration(IAppBuilder app)
+        {
+            app.MapSignalR();
+            Startup.ConfigureDepencyInjectionAndLogger();
+        }
 
         public static void ConfigureDepencyInjectionAndLogger()
         {

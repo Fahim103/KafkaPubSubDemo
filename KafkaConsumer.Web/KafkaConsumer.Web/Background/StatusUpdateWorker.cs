@@ -1,4 +1,5 @@
 ﻿using Confluent.Kafka;
+using KafkaConsumer.Hubs;
 using KafkaConsumer.Web.GlobalVariables;
 using System.Diagnostics;
 using System.Threading;
@@ -15,7 +16,7 @@ namespace KafkaConsumer.Web.Background
             {
                 BootstrapServers = "localhost:9092",
                 GroupId = SharedVariables.ConsumerGroupID,
-                AutoOffsetReset = AutoOffsetReset.Earliest
+                AutoOffsetReset = AutoOffsetReset.Latest
             };
 
             _consumer = new ConsumerBuilder<Ignore, string>(config).Build();
@@ -32,7 +33,7 @@ namespace KafkaConsumer.Web.Background
                 var message = consumeResult.Message.Value;
                 var workerName = nameof(StatusUpdateWorker);
                 Debug.WriteLine($"{workerName} Received Message : {message}");
-
+                TestMessageHub.BroadcastData();
                 // Write in the global shared variable
                 SharedVariables.Message = message;
                 SharedVariables.MessagesList.Add(message);
