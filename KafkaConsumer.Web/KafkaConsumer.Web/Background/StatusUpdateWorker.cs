@@ -33,10 +33,11 @@ namespace KafkaConsumer.Web.Background
                 var message = consumeResult.Message.Value;
                 var workerName = nameof(StatusUpdateWorker);
                 Debug.WriteLine($"{workerName} Received Message : {message}");
-                TestMessageHub.BroadcastData();
                 // Write in the global shared variable
                 SharedVariables.Message = message;
                 SharedVariables.MessagesList.Add(message);
+                // call SignalR method
+                TestMessageHub.BroadcastData();
             }
 
             _consumer.Close();
