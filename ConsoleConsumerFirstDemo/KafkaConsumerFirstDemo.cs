@@ -17,7 +17,7 @@ namespace ConsoleConsumerFirstDemo
 
             var config = new ConsumerConfig
             {
-                BootstrapServers = "localhost:9092",
+                BootstrapServers = "192.168.2.63:9092, 192.168.3.17:9092",
                 GroupId = "console-demo1",
                 AutoOffsetReset = AutoOffsetReset.Earliest,
 

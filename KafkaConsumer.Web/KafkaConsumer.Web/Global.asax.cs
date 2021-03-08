@@ -1,4 +1,5 @@
 ﻿using KafkaConsumer.Web.Background;
+using KafkaConsumer.Web.GlobalVariables;
 using System.Diagnostics;
 using System.Threading;
 using System.Web.Hosting;
@@ -44,14 +45,14 @@ namespace KafkaConsumer.Web
                 _statusUpdateWorker.StartProcessing(cancellationToken);
             });
 
-            HostingEnvironment.QueueBackgroundWorkItem(ct =>
-            {
-                TimeBasedConsumerWorkerCancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(ct);
-                var cancellationToken = TimeBasedConsumerWorkerCancellationTokenSource.Token;
+            //HostingEnvironment.QueueBackgroundWorkItem(ct =>
+            //{
+            //    TimeBasedConsumerWorkerCancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(ct);
+            //    var cancellationToken = TimeBasedConsumerWorkerCancellationTokenSource.Token;
 
-                Debug.WriteLine($"Token is {cancellationToken}");
-                _timeStampUpdateWorker.StartProcessing(cancellationToken);
-            });
+            //    Debug.WriteLine($"Token is {cancellationToken}");
+            //    _timeStampUpdateWorker.StartProcessing(cancellationToken);
+            //});
         }
 
 
@@ -59,7 +60,8 @@ namespace KafkaConsumer.Web
         {
             // Cancel the kafka consumer
             StatusUpdateWorkerCancellationTokenSource.Cancel();
-            TimeBasedConsumerWorkerCancellationTokenSource.Cancel();
+            ConsumerGroupIdAllocator.ReleaseGroupId(SharedVariables.ConsumerGroupID);
+            // TimeBasedConsumerWorkerCancellationTokenSource.Cancel();
         }
     }
 }

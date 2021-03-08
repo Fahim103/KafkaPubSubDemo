@@ -14,9 +14,11 @@ namespace KafkaConsumer.Web.Background
         {
             var config = new ConsumerConfig
             {
+                //BootstrapServers = "192.168.2.63:9092, 192.168.3.17:9092",
                 BootstrapServers = "localhost:9092",
                 GroupId = SharedVariables.ConsumerGroupID,
-                AutoOffsetReset = AutoOffsetReset.Latest
+                //GroupId = ConsumerGroupIdAllocator.GetGroupId(),
+                AutoOffsetReset = AutoOffsetReset.Earliest
             };
 
             _consumer = new ConsumerBuilder<Ignore, string>(config).Build();
@@ -29,15 +31,23 @@ namespace KafkaConsumer.Web.Background
 
             while (!cancellationToken.IsCancellationRequested)
             {
-                var consumeResult = _consumer.Consume(cancellationToken);
-                var message = consumeResult.Message.Value;
-                var workerName = nameof(StatusUpdateWorker);
-                Debug.WriteLine($"{workerName} Received Message : {message}");
-                // Write in the global shared variable
-                SharedVariables.Message = message;
-                SharedVariables.MessagesList.Add(message);
-                // call SignalR method
-                TestMessageHub.BroadcastData();
+                try
+                {
+                    var consumeResult = _consumer.Consume(cancellationToken);
+                    var message = consumeResult.Message.Value;
+                    var workerName = nameof(StatusUpdateWorker);
+                    Debug.WriteLine($"{workerName} Received Message : {message}");
+                    // Write in the global shared variable
+                    SharedVariables.Message = message;
+                    SharedVariables.MessagesList.Add(message);
+                    // call SignalR method
+                    TestMessageHub.BroadcastData();
+                }
+                catch (System.Exception ex)
+                {
+
+                }
+                
             }
 
             _consumer.Close();

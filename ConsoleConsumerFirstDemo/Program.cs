@@ -9,7 +9,7 @@ namespace ConsoleConsumerFirstDemo
     {
         private static ServiceProvider ServiceProvider;
         public static IConfiguration Configuration { get; private set; }
-        public static readonly string TopicName = "demo";
+        public static readonly string TopicName = "FahimDemoTopic";
 
         static void Main(string[] args)
         {
