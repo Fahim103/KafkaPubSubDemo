@@ -1,6 +1,18 @@
 [
   {
-    "GroupId": "0F8E4BE1-FEA8-4445-8FF7-D3A4298ED4FB",
-    "IsAvailable": true
+    "GroupId": "43c3b498-0694-4897-b07e-c2d74122a3d6",
+    "IsAvailable": false
+  },
+  {
+    "GroupId": "c9713264-96a0-4cd3-ad23-6cde64350f60",
+    "IsAvailable": false
+  },
+  {
+    "GroupId": "05a2f7ba-8002-4c7d-aba0-1b91a7f761d9",
+    "IsAvailable": false
+  },
+  {
+    "GroupId": "98e76c2c-fbd4-4c72-8582-7231de1f8fb8",
+    "IsAvailable": false
   }
 ]

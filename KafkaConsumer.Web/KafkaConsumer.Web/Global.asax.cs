@@ -60,7 +60,7 @@ namespace KafkaConsumer.Web
         {
             // Cancel the kafka consumer
             StatusUpdateWorkerCancellationTokenSource.Cancel();
-            ConsumerGroupIdAllocator.ReleaseGroupId(SharedVariables.ConsumerGroupID);
+            ConsumerGroupIdAllocator.ReleaseGroupId(SharedVariables.GetConsumerGroupId());
             // TimeBasedConsumerWorkerCancellationTokenSource.Cancel();
         }
     }

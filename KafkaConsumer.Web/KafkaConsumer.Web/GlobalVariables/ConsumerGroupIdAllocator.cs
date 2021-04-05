@@ -21,14 +21,21 @@ namespace KafkaConsumer.Web.GlobalVariables
         private static string FileName = "GroupIDList.json";
         private static string FilePath = Path.Combine(BaseDirectory, FileName);
 
-        public static string GetGroupId()
+        public static (string groupId, bool isNewGroupId) GetGroupId()
         {
             var mutex = GetMutex();
             var isAcquired = true;
+            bool isNewGroupId = false;
 
             try
             {
                 var data = LoadJson();
+                
+                if (data == null)
+                {
+                    data = new List<KafkaGroupIdData>();
+                }
+
                 var avaialbleGroupItem = data.FindIndex(x => x.IsAvailable == true);
 
                 if (avaialbleGroupItem != -1)
@@ -39,6 +46,7 @@ namespace KafkaConsumer.Web.GlobalVariables
                 else
                 {
                     string newGroupIdToAddToFile = Guid.NewGuid().ToString();
+                    isNewGroupId = true;
                     data.Add(new KafkaGroupIdData()
                     {
                         GroupId = newGroupIdToAddToFile,
@@ -55,7 +63,7 @@ namespace KafkaConsumer.Web.GlobalVariables
 
                 mutex.ReleaseMutex();
                 isAcquired = false;
-                return groupId;
+                return (groupId, isNewGroupId);
             }
             catch (Exception ex)
             {

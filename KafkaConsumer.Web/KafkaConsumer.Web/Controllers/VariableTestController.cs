@@ -41,7 +41,7 @@ namespace KafkaConsumer.Web.Controllers
             {
                 Message = SharedVariables.Message,
                 ProcessId = Process.GetCurrentProcess().Id,
-                ConsumerGroupId = SharedVariables.ConsumerGroupID
+                ConsumerGroupId = SharedVariables.GetConsumerGroupId()
             };
 
             return View(model);

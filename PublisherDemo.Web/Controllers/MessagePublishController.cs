@@ -59,7 +59,6 @@ namespace PublisherDemo.Web.Controllers
 
                 Debug.WriteLine(deliveryReport.Value);
 
-
                 Thread.Sleep(10000);
 
                 //tasks.Add(

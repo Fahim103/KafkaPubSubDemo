@@ -12,13 +12,14 @@ namespace KafkaConsumer.Web.Background
 
         public StatusUpdateWorker()
         {
+            var (groupId, isNewGroupId) = SharedVariables.GetConsumerInfo();
+
             var config = new ConsumerConfig
             {
                 //BootstrapServers = "192.168.2.63:9092, 192.168.3.17:9092",
                 BootstrapServers = "localhost:9092",
-                GroupId = SharedVariables.ConsumerGroupID,
-                //GroupId = ConsumerGroupIdAllocator.GetGroupId(),
-                AutoOffsetReset = AutoOffsetReset.Earliest
+                GroupId = groupId,
+                AutoOffsetReset = isNewGroupId ? AutoOffsetReset.Latest : AutoOffsetReset.Earliest
             };
 
             _consumer = new ConsumerBuilder<Ignore, string>(config).Build();
